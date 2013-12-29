@@ -1,0 +1,26 @@
+xauth:
+  01:48 #openmoko-debian < lindi-> enrico: hmm, http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=595750 is still open?
+  01:53 #openmoko-debian < lindi-> enrico: just generating cookiefile to to some /var/lib/nodm/ and using it in Xorg 
+                                   -auth and $XAUTHORITY should fix it
+  01:56 #openmoko-debian < enrico> lindi-: the bug is still open but it's indeed ripe for closing; only, I do not know 
+                                   how that machinery works
+  01:57 #openmoko-debian < lindi-> gdm3 _create_xauth_file_for_user has all the details
+  01:57 #openmoko-debian < enrico> progress: after testing the display manaager on my freerunner and seeing that it 
+                                   works, I've now merged my branch on master
+  01:57 #openmoko-debian < lindi-> as you can guess, lots of paranoid checks :)
+  01:57 #openmoko-debian < lindi-> *cookie = gdm_generate_random_bytes (GDM_DISPLAY_ACCESS_COOKIE_SIZE, &add_error);
+  01:59 #openmoko-debian < enrico> lindi-: neat, sounds doable. I now have full control over the X command line in a 
+                                   very cool way
+  01:59 #openmoko-debian < lindi-> enrico: but I kind of like how gdm3 does it. for example now I have 
+                                   /var/run/gdm3/auth-for-lindi-uoAyyh/database
+  02:00 #openmoko-debian < enrico> lindi-: mind if I write it to $HOME/.Xauthority ? I rather not having to maintain a 
+                                   custom dir structure on /var/run for nodm
+  02:00 #openmoko-debian < lindi-> enrico: I kind of like gdm3 approach more, writing to $HOME is ugly. since user can  
+                                   use it on multiple machines you need to merge the stuff
+  02:00 #openmoko-debian < lindi-> enrico: you can't just overwrite .Xauthority
+  02:00 #openmoko-debian < enrico> lindi-: oh merge the stuff ouch
+  02:00 #openmoko-debian < lindi-> enrico: you also don't want to infinitely concatenate it
+  02:00 #openmoko-debian < enrico> lindi-: I see the point
+  02:00 #openmoko-debian < lindi-> and think of locking, nfs
+  02:01 #openmoko-debian < lindi-> gdm-display-access-file.c in gdm3 sources has all the logic
+oppure fare uno script da sourciare prima di far partire X
